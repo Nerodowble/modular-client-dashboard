@@ -1,13 +1,14 @@
 
 import React, { useState } from 'react';
 import { 
-  ArrowDownRight, 
-  ArrowUpRight, 
-  DollarSign,
   Users, 
-  LineChart,
+  UserCheck,
+  Database, 
+  Activity,
   BarChart2,
-  ListChecks 
+  CalendarDays,
+  ChartLine,
+  ChartPie
 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -35,44 +36,69 @@ const mockClientData = {
     address: "Rua das Flores, 123 - São Paulo, SP",
     contract: {
       startDate: "01/01/2023",
-      endDate: "31/12/2023",
-      value: "R$ 120.000,00",
+      endDate: "31/12/2025",
       status: "Ativo"
     },
     metrics: {
-      revenue: "R$ 54.250,00",
-      customers: 126,
-      tasks: 38,
-      completionRate: "87%"
+      activeUsers: 126,
+      loggedUsers2025: 98,
+      samlCompanies: 3,
+      standardsCount: 287
     },
     trends: {
-      revenue: 12.5,
-      customers: 8.2,
-      tasks: -4.3,
-      completionRate: 3.7
+      activeUsers: 8.2,
+      loggedUsers2025: 15.7,
+      samlCompanies: 0,
+      standardsCount: 12.3
     },
-    monthlyData: [
-      { month: "Jan", revenue: 4200, customers: 95 },
-      { month: "Fev", revenue: 4800, customers: 100 },
-      { month: "Mar", revenue: 5100, customers: 105 },
-      { month: "Abr", revenue: 4900, customers: 110 },
-      { month: "Mai", revenue: 5300, customers: 115 },
-      { month: "Jun", revenue: 5700, customers: 120 },
-      { month: "Jul", revenue: 6250, customers: 126 }
+    contractedBases: [
+      "Base Regulatória Nacional",
+      "Base de Compliance",
+      "Base Internacional",
+      "Base Setorial Financeira"
     ],
-    productData: [
-      { name: "Produto A", value: 35 },
-      { name: "Produto B", value: 25 },
-      { name: "Produto C", value: 20 },
-      { name: "Produto D", value: 15 },
-      { name: "Outros", value: 5 },
+    contractedProducts: [
+      { name: "meta.platform", status: "Ativo", usageLevel: "Alto" },
+      { name: "flow.platform", status: "Ativo", usageLevel: "Médio" },
+      { name: "radar.platform", status: "Ativo", usageLevel: "Alto" },
+      { name: "search.platform", status: "Inativo", usageLevel: "Baixo" },
+      { name: "export_archer", status: "Ativo", usageLevel: "Médio" },
+      { name: "llm_gpt.platform", status: "Ativo", usageLevel: "Alto" },
+      { name: "data_quality_monitor", status: "Ativo", usageLevel: "Médio" }
     ],
-    tasksList: [
-      { id: "1", task: "Análise mensal", status: "Concluído", dueDate: "15/07/2023", assignee: "Carlos Gomes" },
-      { id: "2", task: "Relatório financeiro", status: "Em andamento", dueDate: "22/07/2023", assignee: "Ana Pereira" },
-      { id: "3", task: "Reunião de alinhamento", status: "Pendente", dueDate: "28/07/2023", assignee: "João Silva" },
-      { id: "4", task: "Atualização de sistema", status: "Concluído", dueDate: "10/07/2023", assignee: "Mariana Costa" },
-      { id: "5", task: "Treinamento da equipe", status: "Em andamento", dueDate: "25/07/2023", assignee: "Paulo Mendes" }
+    standardsData: [
+      { type: "Pré-Normativos", count: 124 },
+      { type: "Normativos", count: 98 },
+      { type: "Pós-Normativos", count: 65 }
+    ],
+    userActivityData: [
+      { month: "Jan", active: 95, logged: 82 },
+      { month: "Fev", active: 100, logged: 85 },
+      { month: "Mar", active: 105, logged: 90 },
+      { month: "Abr", active: 110, logged: 87 },
+      { month: "Mai", active: 115, logged: 92 },
+      { month: "Jun", active: 120, logged: 94 },
+      { month: "Jul", active: 126, logged: 98 }
+    ],
+    productUsageData: [
+      { name: "meta.platform", value: 35 },
+      { name: "flow.platform", value: 15 },
+      { name: "radar.platform", value: 25 },
+      { name: "search.platform", value: 5 },
+      { name: "export_archer", value: 5 },
+      { name: "llm_gpt.platform", value: 10 },
+      { name: "data_quality_monitor", value: 5 }
+    ],
+    associatedAreas: [
+      { id: "1", area: "Jurídico", usersCount: 15 },
+      { id: "2", area: "Compliance", usersCount: 8 },
+      { id: "3", area: "Riscos", usersCount: 12 },
+      { id: "4", area: "Auditoria", usersCount: 5 }
+    ],
+    taxonomies: [
+      { id: "1", name: "Taxonomia de Riscos", categoriesCount: 25 },
+      { id: "2", name: "Taxonomia de Controles", categoriesCount: 18 },
+      { id: "3", name: "Taxonomia Regulatória", categoriesCount: 32 }
     ],
     reports: [
       { id: "1", date: "30/06/2023", title: "Relatório Mensal - Junho 2023", downloadUrl: "#" },
@@ -91,39 +117,57 @@ const mockClientData = {
     address: "Av. Paulista, 1000 - São Paulo, SP",
     contract: {
       startDate: "01/03/2023",
-      endDate: "28/02/2024",
-      value: "R$ 85.000,00",
+      endDate: "28/02/2025",
       status: "Ativo"
     },
     metrics: {
-      revenue: "R$ 37.800,00",
-      customers: 78,
-      tasks: 25,
-      completionRate: "92%"
+      activeUsers: 78,
+      loggedUsers2025: 65,
+      samlCompanies: 1,
+      standardsCount: 142
     },
     trends: {
-      revenue: 8.7,
-      customers: 5.3,
-      tasks: 12.1,
-      completionRate: 2.5
+      activeUsers: 5.3,
+      loggedUsers2025: 7.8,
+      samlCompanies: 0,
+      standardsCount: 4.2
     },
-    monthlyData: [
-      { month: "Mar", revenue: 5100, customers: 65 },
-      { month: "Abr", revenue: 5300, customers: 68 },
-      { month: "Mai", revenue: 5600, customers: 72 },
-      { month: "Jun", revenue: 5900, customers: 75 },
-      { month: "Jul", revenue: 6200, customers: 78 }
+    contractedBases: [
+      "Base Regulatória Nacional",
+      "Base de Compliance"
     ],
-    productData: [
-      { name: "Serviço X", value: 40 },
-      { name: "Serviço Y", value: 30 },
-      { name: "Serviço Z", value: 20 },
-      { name: "Outros", value: 10 }
+    contractedProducts: [
+      { name: "meta.platform", status: "Ativo", usageLevel: "Alto" },
+      { name: "flow.platform", status: "Ativo", usageLevel: "Alto" },
+      { name: "radar.platform", status: "Inativo", usageLevel: "Baixo" },
+      { name: "search.platform", status: "Ativo", usageLevel: "Médio" }
     ],
-    tasksList: [
-      { id: "1", task: "Implementação de sistema", status: "Em andamento", dueDate: "25/07/2023", assignee: "Ricardo Alves" },
-      { id: "2", task: "Auditoria interna", status: "Pendente", dueDate: "31/07/2023", assignee: "Fernanda Lima" },
-      { id: "3", task: "Relatório trimestral", status: "Concluído", dueDate: "10/07/2023", assignee: "Gabriel Santos" }
+    standardsData: [
+      { type: "Pré-Normativos", count: 62 },
+      { type: "Normativos", count: 45 },
+      { type: "Pós-Normativos", count: 35 }
+    ],
+    userActivityData: [
+      { month: "Mar", active: 65, logged: 58 },
+      { month: "Abr", active: 68, logged: 60 },
+      { month: "Mai", active: 72, logged: 63 },
+      { month: "Jun", active: 75, logged: 64 },
+      { month: "Jul", active: 78, logged: 65 }
+    ],
+    productUsageData: [
+      { name: "meta.platform", value: 45 },
+      { name: "flow.platform", value: 35 },
+      { name: "radar.platform", value: 5 },
+      { name: "search.platform", value: 15 }
+    ],
+    associatedAreas: [
+      { id: "1", area: "Jurídico", usersCount: 25 },
+      { id: "2", area: "Compliance", usersCount: 18 },
+      { id: "3", area: "Riscos", usersCount: 10 }
+    ],
+    taxonomies: [
+      { id: "1", name: "Taxonomia de Riscos", categoriesCount: 20 },
+      { id: "2", name: "Taxonomia Regulatória", categoriesCount: 15 }
     ],
     reports: [
       { id: "1", date: "30/06/2023", title: "Relatório Mensal - Junho 2023", downloadUrl: "#" },
@@ -140,37 +184,51 @@ const mockClientData = {
     address: "Rua da Indústria, 456 - Belo Horizonte, MG",
     contract: {
       startDate: "01/05/2023",
-      endDate: "30/04/2024",
-      value: "R$ 65.000,00",
+      endDate: "30/04/2025",
       status: "Ativo"
     },
     metrics: {
-      revenue: "R$ 18.500,00",
-      customers: 42,
-      tasks: 16,
-      completionRate: "75%"
+      activeUsers: 42,
+      loggedUsers2025: 38,
+      samlCompanies: 0,
+      standardsCount: 95
     },
     trends: {
-      revenue: 15.2,
-      customers: 10.5,
-      tasks: 7.8,
-      completionRate: -2.3
+      activeUsers: 10.5,
+      loggedUsers2025: 12.2,
+      samlCompanies: 0,
+      standardsCount: 8.7
     },
-    monthlyData: [
-      { month: "Mai", revenue: 5500, customers: 35 },
-      { month: "Jun", revenue: 6200, customers: 38 },
-      { month: "Jul", revenue: 6800, customers: 42 }
+    contractedBases: [
+      "Base Regulatória Nacional"
     ],
-    productData: [
-      { name: "Produto Alpha", value: 45 },
-      { name: "Produto Beta", value: 35 },
-      { name: "Outros", value: 20 }
+    contractedProducts: [
+      { name: "meta.platform", status: "Ativo", usageLevel: "Médio" },
+      { name: "flow.platform", status: "Inativo", usageLevel: "Baixo" },
+      { name: "radar.platform", status: "Ativo", usageLevel: "Alto" }
     ],
-    tasksList: [
-      { id: "1", task: "Integração de sistemas", status: "Em andamento", dueDate: "20/07/2023", assignee: "Juliana Costa" },
-      { id: "2", task: "Análise de mercado", status: "Concluído", dueDate: "05/07/2023", assignee: "André Martins" },
-      { id: "3", task: "Desenvolvimento de website", status: "Pendente", dueDate: "10/08/2023", assignee: "Marcelo Dias" },
-      { id: "4", task: "Campanha de marketing", status: "Em andamento", dueDate: "15/07/2023", assignee: "Patricia Silva" }
+    standardsData: [
+      { type: "Pré-Normativos", count: 42 },
+      { type: "Normativos", count: 38 },
+      { type: "Pós-Normativos", count: 15 }
+    ],
+    userActivityData: [
+      { month: "Mai", active: 35, logged: 30 },
+      { month: "Jun", active: 38, logged: 32 },
+      { month: "Jul", active: 42, logged: 38 }
+    ],
+    productUsageData: [
+      { name: "meta.platform", value: 35 },
+      { name: "flow.platform", value: 10 },
+      { name: "radar.platform", value: 55 }
+    ],
+    associatedAreas: [
+      { id: "1", area: "Jurídico", usersCount: 22 },
+      { id: "2", area: "Compliance", usersCount: 20 }
+    ],
+    taxonomies: [
+      { id: "1", name: "Taxonomia de Riscos", categoriesCount: 18 },
+      { id: "2", name: "Taxonomia Regulatória", categoriesCount: 12 }
     ],
     reports: [
       { id: "1", date: "30/06/2023", title: "Relatório Mensal - Junho 2023", downloadUrl: "#" },
@@ -192,14 +250,14 @@ const Index = () => {
     // Lógica para visualizar o relatório
   };
 
-  const tableColumns = [
-    { header: "Tarefa", accessorKey: "task" },
+  // Tabela de produtos contratados
+  const productsColumns = [
+    { header: "Produto", accessorKey: "name" },
     { header: "Status", accessorKey: "status", 
       cell: (value: string) => {
         const colorMap: Record<string, string> = {
-          "Concluído": "bg-green-100 text-green-800",
-          "Em andamento": "bg-blue-100 text-blue-800",
-          "Pendente": "bg-yellow-100 text-yellow-800",
+          "Ativo": "bg-green-100 text-green-800",
+          "Inativo": "bg-red-100 text-red-800",
         };
         return (
           <span className={`px-2 py-1 rounded-full text-xs font-medium ${colorMap[value] || ""}`}>
@@ -208,8 +266,32 @@ const Index = () => {
         );
       }
     },
-    { header: "Prazo", accessorKey: "dueDate" },
-    { header: "Responsável", accessorKey: "assignee" },
+    { header: "Nível de Uso", accessorKey: "usageLevel", 
+      cell: (value: string) => {
+        const colorMap: Record<string, string> = {
+          "Alto": "bg-blue-100 text-blue-800",
+          "Médio": "bg-yellow-100 text-yellow-800",
+          "Baixo": "bg-gray-100 text-gray-800",
+        };
+        return (
+          <span className={`px-2 py-1 rounded-full text-xs font-medium ${colorMap[value] || ""}`}>
+            {value}
+          </span>
+        );
+      }
+    },
+  ];
+
+  // Tabela de áreas associadas
+  const areasColumns = [
+    { header: "Área", accessorKey: "area" },
+    { header: "Qtd. Usuários", accessorKey: "usersCount" },
+  ];
+
+  // Tabela de taxonomias
+  const taxonomiesColumns = [
+    { header: "Taxonomia", accessorKey: "name" },
+    { header: "Qtd. Categorias", accessorKey: "categoriesCount" },
   ];
   
   return (
@@ -249,7 +331,6 @@ const Index = () => {
                 <div>
                   <p>Início: {clientData.contract.startDate}</p>
                   <p>Término: {clientData.contract.endDate}</p>
-                  <p>Valor: {clientData.contract.value}</p>
                   <p className="mt-1">
                     <span className="px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
                       {clientData.contract.status}
@@ -265,63 +346,101 @@ const Index = () => {
       {/* Métricas principais */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         <MetricCard
-          title="Receita Mensal"
-          value={clientData.metrics.revenue}
-          description="Total do mês atual"
-          icon={<DollarSign />}
-          trend={{ value: clientData.trends.revenue, isPositive: clientData.trends.revenue > 0 }}
-        />
-        <MetricCard
-          title="Clientes"
-          value={clientData.metrics.customers}
-          description="Clientes ativos"
+          title="Usuários Ativos"
+          value={clientData.metrics.activeUsers}
+          description="Total atual"
           icon={<Users />}
-          trend={{ value: clientData.trends.customers, isPositive: clientData.trends.customers > 0 }}
+          trend={{ value: clientData.trends.activeUsers, isPositive: clientData.trends.activeUsers > 0 }}
         />
         <MetricCard
-          title="Tarefas"
-          value={clientData.metrics.tasks}
-          description="Tarefas em progresso"
-          icon={<ListChecks />}
-          trend={{ value: clientData.trends.tasks, isPositive: clientData.trends.tasks > 0 }}
+          title="Usuários Logados (2025)"
+          value={clientData.metrics.loggedUsers2025}
+          description="No ano atual"
+          icon={<UserCheck />}
+          trend={{ value: clientData.trends.loggedUsers2025, isPositive: clientData.trends.loggedUsers2025 > 0 }}
         />
         <MetricCard
-          title="Taxa de Conclusão"
-          value={clientData.metrics.completionRate}
-          description="Média de conclusão"
-          icon={<BarChart2 />}
-          trend={{ value: clientData.trends.completionRate, isPositive: clientData.trends.completionRate > 0 }}
+          title="Empresas com SAML"
+          value={clientData.metrics.samlCompanies}
+          description="Integração ativa"
+          icon={<Activity />}
+          trend={{ value: clientData.trends.samlCompanies, isPositive: clientData.trends.samlCompanies > 0 }}
+        />
+        <MetricCard
+          title="Normativos"
+          value={clientData.metrics.standardsCount}
+          description="Total"
+          icon={<Database />}
+          trend={{ value: clientData.trends.standardsCount, isPositive: clientData.trends.standardsCount > 0 }}
         />
       </div>
 
       {/* Gráficos */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
         <ChartContainer
-          title="Evolução Mensal"
+          title="Atividade de Usuários"
           type="line"
-          data={clientData.monthlyData}
+          data={clientData.userActivityData}
           dataKey="month"
-          categories={["revenue", "customers"]}
+          categories={["active", "logged"]}
           colors={["#1E40AF", "#10B981"]}
         />
         <ChartContainer
-          title="Distribuição de Produtos"
+          title="Distribuição de Uso por Produto"
           type="pie"
-          data={clientData.productData}
+          data={clientData.productUsageData}
           dataKey="name"
           categories={["value"]}
         />
       </div>
+      
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <ChartContainer
+          title="Distribuição de Normativos"
+          type="bar"
+          data={clientData.standardsData}
+          dataKey="type"
+          categories={["count"]}
+          colors={["#8B5CF6"]}
+        />
+      </div>
+
+      {/* Bases Contratadas */}
+      <DashboardContainer title="Bases Contratadas" className="mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          {clientData.contractedBases.map((base, index) => (
+            <div 
+              key={index} 
+              className="p-4 border rounded-lg bg-blue-50 border-blue-200 text-center"
+            >
+              <Database className="h-8 w-8 mx-auto mb-2 text-blue-600" />
+              <p>{base}</p>
+            </div>
+          ))}
+        </div>
+      </DashboardContainer>
 
       {/* Conteúdo em abas */}
-      <Tabs defaultValue="tasks" className="mb-8">
+      <Tabs defaultValue="products" className="mb-8">
         <TabsList className="mb-4">
-          <TabsTrigger value="tasks">Tarefas</TabsTrigger>
+          <TabsTrigger value="products">Produtos</TabsTrigger>
+          <TabsTrigger value="areas">Áreas</TabsTrigger>
+          <TabsTrigger value="taxonomies">Taxonomias</TabsTrigger>
           <TabsTrigger value="reports">Histórico de Relatórios</TabsTrigger>
         </TabsList>
-        <TabsContent value="tasks">
-          <DashboardContainer title="Lista de Tarefas" onEdit={() => console.log("Editar tarefas")}>
-            <DataTable columns={tableColumns} data={clientData.tasksList} />
+        <TabsContent value="products">
+          <DashboardContainer title="Produtos Contratados">
+            <DataTable columns={productsColumns} data={clientData.contractedProducts} />
+          </DashboardContainer>
+        </TabsContent>
+        <TabsContent value="areas">
+          <DashboardContainer title="Áreas Associadas">
+            <DataTable columns={areasColumns} data={clientData.associatedAreas} />
+          </DashboardContainer>
+        </TabsContent>
+        <TabsContent value="taxonomies">
+          <DashboardContainer title="Taxonomias Associadas">
+            <DataTable columns={taxonomiesColumns} data={clientData.taxonomies} />
           </DashboardContainer>
         </TabsContent>
         <TabsContent value="reports">
